@@ -10,7 +10,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: ['https://ehttps://ecommercegames.netlify.app', 'http://localhost:3000'],
+  origin: ['https://ecommercegames.netlify.app', 'http://localhost:3000'],
   credentials: true
 }));
 app.use(express.json());
