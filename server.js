@@ -9,7 +9,10 @@ const { authMiddleware } = require('./middleware/auth');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['https://ehttps://ecommercegames.netlify.app', 'http://localhost:3000'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Connect to MongoDB
@@ -35,6 +38,15 @@ app.post('/api/orders', authMiddleware, orderController.createOrder);
 app.get('/api/orders/myorders', authMiddleware, orderController.getUserOrders);
 app.get('/api/orders', authMiddleware, orderController.getAllOrders);
 app.put('/api/orders/:id', authMiddleware, orderController.updateOrderStatus);
+
+
+// Serve frontend in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../frontend/build')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../frontend', 'build', 'index.html'));
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
